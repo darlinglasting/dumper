@@ -11,10 +11,14 @@
 
 ## What is Dumper?
 
-Dumper is a simple script that gets scripts and remotes in a game
-then writes them to the workspace folder.
+Dumper is a simple script that fetches any scripts and remotes in a game
+and writes them to workspace.
 Scripts will not decompile if you do not have a decompiler.
 
 If you want something added, fixed, or anything else, feel free to DM me.
 
-— @darlinglasting
+<div align="center">
+
+@darlinglasting
+
+</div>

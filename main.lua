@@ -8,7 +8,7 @@ local function folder(folderPath)
     end
 end
 
-local function dump(instance, path, counts)
+local function harvest(instance, path, counts)
     local scripts = {LocalScript = true, Script = true, ModuleScript = true}
     local remotes = {RemoteEvent = true, RemoteFunction = true, BindableEvent = true, BindableFunction = true}
     local methods = {RemoteFunction = "InvokeServer", BindableEvent = "Fire", BindableFunction = "Invoke"}
@@ -129,18 +129,18 @@ local function dump(instance, path, counts)
             local nextpath = path .. name .. " children/"
             folder(nextpath)
             for _, child in pairs(children) do
-                dump(child, nextpath, {})
+                harvest(child, nextpath, {})
             end
         end
     else
         for _, child in pairs(instance:GetChildren()) do
-            dump(child, path, counts)
+            harvest(child, path, counts)
         end
     end
 end
 
 local function process()
-    local basepath = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name:gsub("[^%w%s%-]", ""):gsub("%s+", " "):gsub("%s+$", "") .. "@dumped/"
+    local basepath = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name:gsub("[^%w%s%-]", ""):gsub("%s+", " "):gsub("%s+$", "") .. "@harvest/"
     if isfolder(basepath) then delfolder(basepath) end
     
     for _, serviceName in ipairs({"ReplicatedFirst", "ReplicatedStorage", "Players", "StarterPlayer"}) do
@@ -149,9 +149,9 @@ local function process()
             if service.Name ~= serviceName then pcall(function() service.Name = serviceName end) end
             local root = basepath .. serviceName .. "/"
             if not isfolder(root) then makefolder(root) end
-            for _, child in pairs(service:GetChildren()) do dump(child, root, {}) end
+            for _, child in pairs(service:GetChildren()) do harvest(child, root, {}) end
         end)
     end
 end
 
-process();print("Dumped in " .. string.format("%.2f", tick() - startTime) .. " seconds")
+process();print("harvest finished in " .. string.format("%.2f", tick() - startTime) .. " seconds")
